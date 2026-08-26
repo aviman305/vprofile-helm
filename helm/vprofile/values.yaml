@@ -1,10 +1,9 @@
 app:
-  image: vprocontainers/vprofileapp
-  tag: latest
+  image: 636858385418.dkr.ecr.us-east-1.amazonaws.com/vproappimg
+  tag: 704398d
   replicas: 1
   containerPort: 8080
   servicePort: 8080
-
 db:
   image: vprocontainers/vprofiledb
   tag: latest
@@ -13,14 +12,12 @@ db:
   servicePort: 3306
   storageClass: gp2
   storageSize: 3Gi
-
 memcached:
   image: memcached
   tag: latest
   replicas: 1
   containerPort: 11211
   servicePort: 11211
-
 rabbitmq:
   image: rabbitmq
   tag: latest
@@ -28,22 +25,18 @@ rabbitmq:
   containerPort: 5672
   servicePort: 5672
   defaultUser: guest
-
 initcontainers:
   image: busybox
   tag: latest
   dbCommand: until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done;
   memcachedCommand: until nslookup vprocache01.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for memcache; sleep 2; done;
-
 ingress:
   enabled: true
   host: ""
   servicePort: 8080
-
 secrets:
   dbPass: vprodbpass
   rmqPass: guest
-
 dockerregistry:
   enabled: false
   server: ""
